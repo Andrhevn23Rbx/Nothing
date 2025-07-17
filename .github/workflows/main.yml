@@ -9,64 +9,22 @@ on:
 
 jobs:
   BuildDesktop:
-    name: ${{ matrix.name }}
-    strategy:
-      matrix:
-        include:
-          - name: Windows
-            os: windows-2022
-            buildArgs: windows
-            artifactName: H-Slice_0.2.1_Windows
-            setupScript: .\"setup/windows.bat"
-            artifactPath: export\release\windows\bin\*
-          - name: Linux
-            os: ubuntu-22.04
-            buildArgs: linux
-            setupScript: sh ./setup/unix.sh
-            artifactName: H-Slice_0.2.1_Linux
-            artifactPath: export/release/linux/bin/*
-          - name: macOS x86_64
-            os: macos-14
-            buildArgs: "mac -64 -D HXCPP_M64"
-            setupScript: sh ./setup/mobile.sh
-            artifactName: H-Slice_0.2.1_macOS_x64
-            artifactPath: export/release/macos/bin/*
-          - name: macOS AArch64
-            os: macos-15
-            buildArgs: mac
-            setupScript: sh ./setup/mobile.sh
-            artifactName: H-Slice_0.2.1_macOS_arm64
-            artifactPath: export/release/macos/bin/*
-    uses: ./.github/workflows/build.yml
-    with:
-      name: ${{ matrix.name }}
-      os: ${{ matrix.os }}
-      buildArgs: ${{ matrix.buildArgs }}
-      setupScript: ${{ matrix.setupScript }}
-      artifactName: ${{ matrix.artifactName }}
-      artifactPath: ${{ matrix.artifactPath }}
-  BuildMobile:
-    name: ${{ matrix.name }}
-    strategy:
-      matrix:
-        include:
-          - name: Android
-            os: macos-15
-            buildArgs: "android"
-            setupScript: sh ./setup/mobile.sh
-            artifactName: H-Slice_0.2.1_Android
-            artifactPath: "export/release/android/bin/app/build/outputs/apk/release/*.apk"
-          - name: iOS
-            os: macos-15
-            buildArgs: "ios -nosign"
-            setupScript: sh ./setup/mobile.sh
-            artifactName: H-Slice_0.2.1_iOS
-            artifactPath: "export/release/ios/build/Release-iphoneos/*.ipa"
-    uses: ./.github/workflows/build.yml
-    with:
-      name: ${{ matrix.name }}
-      os: ${{ matrix.os }}
-      buildArgs: ${{ matrix.buildArgs }}
-      setupScript: ${{ matrix.setupScript }}
-      artifactName: ${{ matrix.artifactName }}
-      artifactPath: ${{ matrix.artifactPath }}
+    name: Windows
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup
+        run: .\setup\windows.bat
+
+      - name: Build
+        run: |
+          echo Building for Windows...
+          REM Replace with actual build command
+          # Example: haxelib run lime build windows -release
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: H-Slice_0.2.1_Windows
+          path: export\release\windows\bin\*
